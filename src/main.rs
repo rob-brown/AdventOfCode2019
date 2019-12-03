@@ -4,14 +4,23 @@ mod day1;
 mod day2;
 mod day3;
 
-fn main() {
+fn time<F>(f: F)
+where
+    F: Fn(),
+{
     let start = Instant::now();
-
-    day1::solve();
-    day2::solve();
-    day3::solve();
-
+    f();
     let duration = Instant::now().duration_since(start);
-    println!();
-    println!("Ran in {:?}", duration);
+    println!("Ran in {:?}\n", duration);
+}
+
+fn solve_all() {
+    time(day1::solve);
+    time(day2::solve);
+    time(day3::solve);
+    println!("Done");
+}
+
+fn main() {
+    time(solve_all);
 }
