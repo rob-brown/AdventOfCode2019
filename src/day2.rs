@@ -44,7 +44,7 @@ pub fn solve() {
     // 2782414
     println!("Day 2:A = {}", run_intcode(positions.clone()));
 
-    for noun in 0..100 {
+    'outer: for noun in 0..100 {
         for verb in 0..100 {
             positions[1] = noun;
             positions[2] = verb;
@@ -52,6 +52,7 @@ pub fn solve() {
             if run_intcode(positions.clone()) == 19690720 {
                 // 9820
                 println!("Day 2:B = {}", 100 * noun + verb);
+                break 'outer;
             }
         }
     }
