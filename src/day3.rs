@@ -1,6 +1,8 @@
 use std::cmp::min;
 use std::collections::HashMap;
 
+// TODO: Try https://en.m.wikipedia.org/wiki/Bentley–Ottmann_algorithm
+
 pub fn solve() {
     let wire1 = [
         "R990", "D362", "L316", "U101", "R352", "U798", "L314", "D564", "R961", "D634", "L203",
