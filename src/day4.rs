@@ -45,11 +45,11 @@ pub fn solve() {
 
     while less_than(current, high) {
         if is_increasing(current) {
-            if contains_pair(current) {
-                strict_count += 1;
+            if contains_repeated(current) {
                 lax_count += 1;
-            } else if contains_repeated(current) {
-                lax_count += 1;
+                if contains_pair(current) {
+                    strict_count += 1;
+                }
             }
         }
 
