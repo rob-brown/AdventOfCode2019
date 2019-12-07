@@ -27,13 +27,17 @@ struct Machine {
 }
 
 impl Machine {
-
     fn init(positions: &Vec<i64>) -> Self {
         Machine::new(Vec::new(), 0, false, positions.clone())
     }
 
     fn new(values: Vec<i64>, ip: usize, halted: bool, positions: Vec<i64>) -> Self {
-        Self {values, ip, halted, positions}
+        Self {
+            values,
+            ip,
+            halted,
+            positions,
+        }
     }
 }
 
@@ -213,7 +217,7 @@ pub fn solve() {
 
     println!("Day 7:A = {}", maximum);
 
-    let mut data = [5,6,7,8,9];
+    let mut data = [5, 6, 7, 8, 9];
     let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &positions));
 
     while data.next_permutation() {
