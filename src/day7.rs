@@ -205,8 +205,7 @@ pub fn solve() {
     ];
 
     let mut data = [0, 1, 2, 3, 4];
-    let mut maximum = 0;
-    maximum = max(maximum, run_sequence(data.to_vec(), &positions));
+    let mut maximum = max(0, run_sequence(data.to_vec(), &positions));
 
     while data.next_permutation() {
         maximum = max(maximum, run_sequence(data.to_vec(), &positions));
@@ -215,8 +214,7 @@ pub fn solve() {
     println!("Day 7:A = {}", maximum);
 
     let mut data = [5,6,7,8,9];
-    let mut maximum = 0;
-    maximum = max(maximum, run_streaming_sequence(data.to_vec(), &positions));
+    let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &positions));
 
     while data.next_permutation() {
         maximum = max(maximum, run_streaming_sequence(data.to_vec(), &positions));
