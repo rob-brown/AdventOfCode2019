@@ -19,10 +19,25 @@ fn lookup(positions: &Vec<i64>, mode: i64, value: i64) -> i64 {
     }
 }
 
-fn run_intcode(mut positions: Vec<i64>, inputs: &mut Vec<i64>, instruction_pointer: usize) -> (Vec<i64>, usize, bool, Vec<i64>) {
-    let mut ip = instruction_pointer;
+struct Machine {
+    values: Vec<i64>,
+    ip: usize,
+    halted: bool,
+    positions: Vec<i64>,
+}
+
+impl Machine {
+
+    fn new(values: Vec<i64>, ip: usize, halted: bool, positions: Vec<i64>) -> Self {
+        Self {values, ip, halted, positions}
+    }
+}
+
+fn run_intcode(machine: Machine, inputs: &mut Vec<i64>) -> Machine {
+    let mut ip = machine.ip;
     let mut output = Vec::new();
     let mut halted = false;
+    let mut positions = machine.positions;
 
     loop {
         let op_code = positions[ip];
@@ -106,7 +121,7 @@ fn run_intcode(mut positions: Vec<i64>, inputs: &mut Vec<i64>, instruction_point
 
     output.reverse();
 
-    (output, ip, halted, positions)
+    Machine::new(output, ip, halted, positions)
 }
 
 fn run_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
@@ -116,61 +131,61 @@ fn run_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
         let mut inputs: Vec<i64> = Vec::new();
         inputs.push(value);
         inputs.push(s);
-        let (mut x, _, _, _) = run_intcode(positions.clone(), &mut inputs, 0);
-        value = x.pop().unwrap();
+        let machine = Machine::new(vec![], 0, false, positions.clone());
+        value = run_intcode(machine, &mut inputs).values.pop().unwrap();
     }
 
     value
 }
 
 fn run_streaming_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
-    let mut amp1: (Vec<i64>, usize, bool, Vec<i64>) = (vec![], 0, false, positions.clone());
-    let mut amp2: (Vec<i64>, usize, bool, Vec<i64>) = (vec![], 0, false, positions.clone());
-    let mut amp3: (Vec<i64>, usize, bool, Vec<i64>) = (vec![], 0, false, positions.clone());
-    let mut amp4: (Vec<i64>, usize, bool, Vec<i64>) = (vec![], 0, false, positions.clone());
-    let mut amp5: (Vec<i64>, usize, bool, Vec<i64>) = (vec![0], 0, false, positions.clone());
+    let mut amp1 = Machine::new(vec![], 0, false, positions.clone());
+    let mut amp2 = Machine::new(vec![], 0, false, positions.clone());
+    let mut amp3 = Machine::new(vec![], 0, false, positions.clone());
+    let mut amp4 = Machine::new(vec![], 0, false, positions.clone());
+    let mut amp5 = Machine::new(vec![0], 0, false, positions.clone());
 
     let mut init = false;
 
     loop {
-        let mut inputs: Vec<i64> = amp5.0;
+        let mut inputs: Vec<i64> = amp5.values.clone();
         if init == false {
             inputs.push(sequence[0]);
         }
-        amp1 = run_intcode(amp1.3, &mut inputs, amp1.1);
+        amp1 = run_intcode(amp1, &mut inputs);
 
-        let mut inputs: Vec<i64> = amp1.0;
+        let mut inputs: Vec<i64> = amp1.values.clone();
         if init == false {
             inputs.push(sequence[1]);
         }
-        amp2 = run_intcode(amp2.3, &mut inputs, amp2.1);
+        amp2 = run_intcode(amp2, &mut inputs);
 
-        let mut inputs: Vec<i64> = amp2.0;
+        let mut inputs: Vec<i64> = amp2.values.clone();
         if init == false {
             inputs.push(sequence[2]);
         }
-        amp3 = run_intcode(amp3.3, &mut inputs, amp3.1);
+        amp3 = run_intcode(amp3, &mut inputs);
 
-        let mut inputs: Vec<i64> = amp3.0;
+        let mut inputs: Vec<i64> = amp3.values.clone();
         if init == false {
             inputs.push(sequence[3]);
         }
-        amp4 = run_intcode(amp4.3, &mut inputs, amp4.1);
+        amp4 = run_intcode(amp4, &mut inputs);
 
-        let mut inputs: Vec<i64> = amp4.0;
+        let mut inputs: Vec<i64> = amp4.values.clone();
         if init == false {
             inputs.push(sequence[4]);
         }
-        amp5 = run_intcode(amp5.3, &mut inputs, amp5.1);
+        amp5 = run_intcode(amp5, &mut inputs);
 
         init = true;
 
-        if amp5.2 {
+        if amp5.halted {
             break;
         }
     }
 
-    amp5.0.pop().unwrap()
+    amp5.values.pop().unwrap()
 }
 
 pub fn solve() {
