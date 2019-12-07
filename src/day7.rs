@@ -124,7 +124,7 @@ fn run_intcode(machine: Machine, inputs: &mut Vec<i64>) -> Machine {
     Machine::new(output, ip, halted, positions)
 }
 
-fn run_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
+fn run_sequence(sequence: Vec<i64>, positions: &Vec<i64>) -> i64 {
     let mut value = 0;
 
     for s in sequence {
@@ -138,7 +138,7 @@ fn run_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
     value
 }
 
-fn run_streaming_sequence(sequence: Vec<i64>, positions: Vec<i64>) -> i64 {
+fn run_streaming_sequence(sequence: Vec<i64>, positions: &Vec<i64>) -> i64 {
     let mut amp1 = Machine::new(vec![], 0, false, positions.clone());
     let mut amp2 = Machine::new(vec![], 0, false, positions.clone());
     let mut amp3 = Machine::new(vec![], 0, false, positions.clone());
@@ -216,7 +216,7 @@ pub fn solve() {
     let mut maximum = 0;
 
     loop {
-        maximum = max(maximum, run_sequence(data.to_vec(), positions.clone()));
+        maximum = max(maximum, run_sequence(data.to_vec(), &positions));
 
         if !data.next_permutation() {
             break;
@@ -229,7 +229,7 @@ pub fn solve() {
     let mut maximum = 0;
 
     loop {
-        maximum = max(maximum, run_streaming_sequence(data.to_vec(), positions.clone()));
+        maximum = max(maximum, run_streaming_sequence(data.to_vec(), &positions));
 
         if !data.next_permutation() {
             break;
