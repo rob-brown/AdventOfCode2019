@@ -33,8 +33,12 @@ fn transit_length(path1: Vec<String>, path2: Vec<String>) -> usize {
     let mut set1: HashSet<String> = HashSet::with_capacity(path1.len());
     let mut set2: HashSet<String> = HashSet::with_capacity(path2.len());
 
-    for x in path1 { set1.insert(x); }
-    for x in path2 { set2.insert(x); }
+    for x in path1 {
+        set1.insert(x);
+    }
+    for x in path2 {
+        set2.insert(x);
+    }
 
     let intersection = set1.intersection(&set2).count();
 
