@@ -22,13 +22,14 @@ pub fn solve() {
 
     let mut minimum = 1000;
     let mut product = 0;
+    let mut frame_buffer: [char; PIXELS] = ['2'; PIXELS];
 
-    for chunk in chunks.iter() {
+    for chunk in chunks {
         let mut zeroes = 0;
         let mut ones = 0;
         let mut twos = 0;
 
-        for char in chunk.chars() {
+        for (index, char) in chunk.chars().enumerate() {
             match char {
                 '0' => zeroes += 1,
 
@@ -37,6 +38,10 @@ pub fn solve() {
                 '2' => twos += 1,
 
                 x => panic!("Unknown pixel {}", x),
+            }
+
+            if frame_buffer[index] == '2' {
+                frame_buffer[index] = char;
             }
         }
 
@@ -47,16 +52,6 @@ pub fn solve() {
     }
 
     println!("Day 8:A = {}", product);
-
-    let mut frame_buffer: [char; PIXELS] = ['2'; PIXELS];
-
-    for chunk in chunks.iter() {
-        for (index, char) in chunk.chars().enumerate() {
-            if frame_buffer[index] == '2' {
-                frame_buffer[index] = char;
-            }
-        }
-    }
 
     for i in 0..PIXELS {
         if i % WIDTH == 0 {
