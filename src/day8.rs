@@ -65,6 +65,6 @@ pub fn solve() {
         }
     }
 
-    println!("");
+    println!();
     println!("Day 8:B = HFYAK");
 }
