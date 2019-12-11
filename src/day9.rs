@@ -55,8 +55,6 @@ impl Machine {
             // Relative
             2 => {
                 let offset = self.read(self.ip + arg_number as usize);
-                // println!("Reading {} + {} = {}", value, self.relative_base, offset);
-                // self.read(offset)
                 (self.relative_base + offset) as usize
             }
 
@@ -103,8 +101,6 @@ impl Machine {
                 1 => {
                     let arg1 = self.lookup(mode_arg1(op_code), 1);
                     let arg2 = self.lookup(mode_arg2(op_code), 2);
-                    // let dest = self.read(self.ip + 3) as usize;
-                    // self.write(dest, arg1 + arg2);
                     self.write_param(mode_arg3(op_code), 3, arg1 + arg2);
                     self.ip += 4;
                 }
@@ -113,8 +109,6 @@ impl Machine {
                 2 => {
                     let arg1 = self.lookup(mode_arg1(op_code), 1);
                     let arg2 = self.lookup(mode_arg2(op_code), 2);
-                    // let dest = self.read(self.ip + 3) as usize;
-                    // self.write(dest, arg1 * arg2);
                     self.write_param(mode_arg3(op_code), 3, arg1 * arg2);
                     self.ip += 4;
                 }
@@ -122,16 +116,7 @@ impl Machine {
                 // Read input
                 3 => {
                     if let Some(input) = inputs.pop() {
-                        // let a = if op_code == 203 {
-                        //     1000 as usize
-                        // }
-                        // else {
-                        //     self.lookup(mode_arg1(op_code), 1) as usize
-                        // };
-                        // let a = self.lookup(mode_arg1(op_code), 1) as usize;
-                        // println!("WRinting {} to {}", input, a);
                         self.write_param(mode_arg1(op_code), 1, input);
-                        // println!("checking {}", self.read(1000));
                         self.ip += 2;
                     } else {
                         // Yield if no input available
@@ -164,9 +149,7 @@ impl Machine {
                 7 => {
                     let arg1 = self.lookup(mode_arg1(op_code), 1);
                     let arg2 = self.lookup(mode_arg2(op_code), 2);
-                    // let dest = self.read(self.ip + 3) as usize;
                     let value = if arg1 < arg2 { 1 } else { 0 };
-                    // self.write(dest, value);
                     self.write_param(mode_arg3(op_code), 3, value);
                     self.ip += 4;
                 }
@@ -175,9 +158,7 @@ impl Machine {
                 8 => {
                     let arg1 = self.lookup(mode_arg1(op_code), 1);
                     let arg2 = self.lookup(mode_arg2(op_code), 2);
-                    // let dest = self.read(self.ip + 3) as usize;
                     let value = if arg1 == arg2 { 1 } else { 0 };
-                    // self.write(dest, value);
                     self.write_param(mode_arg3(op_code), 3, value);
                     self.ip += 4;
                 }
