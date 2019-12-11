@@ -9,6 +9,7 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+mod day11;
 
 fn time<F>(f: F)
 where
@@ -30,6 +31,7 @@ fn solve_all() {
     time(day7::solve);
     time(day8::solve);
     time(day9::solve);
+    time(day11::solve);
     println!("Done");
 }
 
