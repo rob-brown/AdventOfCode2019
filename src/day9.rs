@@ -74,8 +74,7 @@ impl Machine {
     fn write(&mut self, offset: usize, value: i64) {
         if offset < self.positions.len() {
             self.positions[offset] = value;
-        }
-        else {
+        } else {
             self.extended_memory.insert(offset, value);
         }
     }
@@ -83,8 +82,7 @@ impl Machine {
     fn read(&self, offset: usize) -> i64 {
         if offset < self.positions.len() {
             self.positions[offset]
-        }
-        else {
+        } else {
             *self.extended_memory.get(&offset).unwrap_or(&0)
         }
     }
@@ -244,7 +242,6 @@ pub fn solve() {
 
     // 3906448201
     println!("Day 9:A = {}", machine.values.pop().unwrap());
-
 
     let mut machine = Machine::init(&positions);
     machine.run_intcode(vec![2]);
