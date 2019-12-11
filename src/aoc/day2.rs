@@ -1,32 +1,4 @@
-fn run_intcode(mut positions: Vec<i32>) -> i32 {
-    let mut current = 0;
-
-    loop {
-        match positions[current] {
-            1 => {
-                let a = positions[current + 1] as usize;
-                let b = positions[current + 2] as usize;
-                let c = positions[current + 3] as usize;
-                positions[c] = positions[a] + positions[b];
-                current += 4;
-            }
-
-            2 => {
-                let a = positions[current + 1] as usize;
-                let b = positions[current + 2] as usize;
-                let c = positions[current + 3] as usize;
-                positions[c] = positions[a] * positions[b];
-                current += 4;
-            }
-
-            99 => break,
-
-            x => panic!("Invalid command {}", x),
-        }
-    }
-
-    positions[0]
-}
+use super::intcode::Machine;
 
 pub fn solve() {
     let mut positions = vec![
@@ -42,14 +14,19 @@ pub fn solve() {
     positions[2] = 2;
 
     // 2782414
-    println!("Day 2:A = {}", run_intcode(positions.clone()));
+    let mut machine = Machine::init(&positions);
+    machine.run(vec![]);
+    println!("Day 2:A = {}", machine.positions[0]);
 
     'outer: for noun in 0..100 {
         for verb in 0..100 {
             positions[1] = noun;
             positions[2] = verb;
 
-            if run_intcode(positions.clone()) == 19690720 {
+            let mut machine = Machine::init(&positions);
+            machine.run(vec![]);
+
+            if machine.positions[0] == 19690720 {
                 // 9820
                 println!("Day 2:B = {}", 100 * noun + verb);
                 break 'outer;

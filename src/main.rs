@@ -1,15 +1,6 @@
 use std::time::Instant;
 
-mod day1;
-mod day11;
-mod day2;
-mod day3;
-mod day4;
-mod day5;
-mod day6;
-mod day7;
-mod day8;
-mod day9;
+mod aoc;
 
 fn time<F>(f: F)
 where
@@ -22,16 +13,16 @@ where
 }
 
 fn solve_all() {
-    time(day1::solve);
-    time(day2::solve);
-    time(day3::solve);
-    time(day4::solve);
-    time(day5::solve);
-    time(day6::solve);
-    time(day7::solve);
-    time(day8::solve);
-    time(day9::solve);
-    time(day11::solve);
+    time(aoc::day1::solve);
+    time(aoc::day2::solve);
+    time(aoc::day3::solve);
+    time(aoc::day4::solve);
+    time(aoc::day5::solve);
+    time(aoc::day6::solve);
+    time(aoc::day7::solve);
+    time(aoc::day8::solve);
+    time(aoc::day9::solve);
+    time(aoc::day11::solve);
     println!("Done");
 }
 

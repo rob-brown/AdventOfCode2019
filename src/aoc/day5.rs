@@ -1,99 +1,4 @@
-fn mode_arg1(op_code: i64) -> i64 {
-    (op_code % 1000) / 100
-}
-
-fn mode_arg2(op_code: i64) -> i64 {
-    (op_code % 10_000) / 1000
-}
-
-fn lookup(positions: &Vec<i64>, mode: i64, value: i64) -> i64 {
-    match mode {
-        0 => positions[value as usize],
-
-        1 => value,
-
-        _ => panic!("Unknown mode {}", mode),
-    }
-}
-
-fn run_intcode(mut positions: Vec<i64>, input: i64) -> i64 {
-    let mut ip = 0;
-    let mut output = 0;
-
-    loop {
-        let op_code = positions[ip];
-        match op_code % 100 {
-            // Add
-            1 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]);
-                let dest = positions[ip + 3] as usize;
-                positions[dest] = arg1 + arg2;
-                ip += 4;
-            }
-
-            // Multiply
-            2 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]);
-                let dest = positions[ip + 3] as usize;
-                positions[dest] = arg1 * arg2;
-                ip += 4;
-            }
-
-            // Read input
-            3 => {
-                let a = positions[ip + 1] as usize;
-                positions[a] = input;
-                ip += 2;
-            }
-
-            // Write output
-            4 => {
-                output = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                ip += 2;
-            }
-
-            // Jump if true
-            5 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]) as usize;
-                ip = if arg1 == 0 { ip + 3 } else { arg2 };
-            }
-
-            // Jump if false
-            6 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]) as usize;
-                ip = if arg1 == 0 { arg2 } else { ip + 3 };
-            }
-
-            // Less than
-            7 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]);
-                let dest = positions[ip + 3] as usize;
-                positions[dest] = if arg1 < arg2 { 1 } else { 0 };
-                ip += 4;
-            }
-
-            // Equal
-            8 => {
-                let arg1 = lookup(&positions, mode_arg1(op_code), positions[ip + 1]);
-                let arg2 = lookup(&positions, mode_arg2(op_code), positions[ip + 2]);
-                let dest = positions[ip + 3] as usize;
-                positions[dest] = if arg1 == arg2 { 1 } else { 0 };
-                ip += 4;
-            }
-
-            99 => break,
-
-            x => panic!("Invalid command {}", x),
-        }
-    }
-
-    output
-}
+use super::intcode::Machine;
 
 pub fn solve() {
     let positions: Vec<i64> = vec![
@@ -136,8 +41,12 @@ pub fn solve() {
     ];
 
     // 11049715
-    println!("Day 5:A = {}", run_intcode(positions.clone(), 1));
+    let mut machine = Machine::init(&positions);
+    machine.run(vec![1]);
+    println!("Day 5:A = {}", machine.values[0]);
 
     // 2140710
-    println!("Day 5:B = {}", run_intcode(positions.clone(), 5));
+    let mut machine = Machine::init(&positions);
+    machine.run(vec![5]);
+    println!("Day 5:B = {}", machine.values[0]);
 }
