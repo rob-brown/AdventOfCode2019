@@ -1,6 +1,9 @@
 use super::intcode::Machine;
 use std::collections::HashMap;
 
+const SCREEN_WIDTH: i32 = 44;
+const SCREEN_HEIGHT: i32 = 23;
+
 struct GameInfo {
     block_count: i32,
     ball_position: (i32, i32),
@@ -45,12 +48,21 @@ fn is_gameover(screen: &HashMap<(i32, i32), i32>) -> bool {
 }
 
 #[allow(dead_code)]
-fn print_screen(screen: &HashMap<(i32, i32), i32>) {
-    let width = 44;
-    let height = 23;
+fn reset_screen() {
+    print!("\x1B[{}D\x1B[{}A", SCREEN_WIDTH + 1, SCREEN_HEIGHT + 1);
+}
 
-    for y in 0..height {
-        for x in 0..width {
+#[allow(dead_code)]
+fn clear_screen() {
+    for _ in 0..(SCREEN_HEIGHT + 1) {
+        print!("\x1B[1A\x1B[2K");
+    }
+}
+
+#[allow(dead_code)]
+fn print_screen(screen: &HashMap<(i32, i32), i32>) {
+    for y in 0..SCREEN_HEIGHT {
+        for x in 0..SCREEN_WIDTH {
             match screen.get(&(x, y)).unwrap_or(&0) {
                 // Wall
                 1 => print!("#"),
@@ -239,6 +251,9 @@ pub fn solve() {
         }
 
         // print_screen(&screen);
+        // let delay = std::time::Duration::from_millis(5);
+        // std::thread::sleep(delay);
+        // clear_screen();
 
         if is_gameover(&screen) {
             break;
