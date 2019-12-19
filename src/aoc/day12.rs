@@ -1,3 +1,5 @@
+use num::integer::lcm;
+
 #[derive(Clone, Copy, Debug)]
 struct Triple {
     x: i32,
@@ -18,7 +20,7 @@ impl Triple {
 type Position = Triple;
 type Velocity = Triple;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 struct Moon {
     position: Position,
     velocity: Velocity,
@@ -94,20 +96,49 @@ fn apply_velocity(moons: &mut [Moon; 4]) {
 }
 
 pub fn solve() {
-    let mut moons: [Moon; 4] = [
+    let initial: [Moon; 4] = [
         Moon::init(Position::new(-16, -1, -12)),
         Moon::init(Position::new(0, -4, -17)),
         Moon::init(Position::new(-11, 11, 0)),
         Moon::init(Position::new(2, 2, -6)),
     ];
+    let mut moons = initial.clone();
+    let mut x_cycle: Option<i64> = None;
+    let mut y_cycle: Option<i64> = None;
+    let mut z_cycle: Option<i64> = None;
+    let mut n = 1;
 
-    for _ in 0..1000 {
+    loop {
         apply_gravity(&mut moons);
         apply_velocity(&mut moons);
+
+        if n == 1000 {
+            let energy: i32 = moons.iter().map(Moon::total_energy).sum();
+
+            // 5517
+            println!("Day 12:A = {}", energy);
+        }
+
+        n += 1;
+
+        if x_cycle == None && initial[0].position.x == moons[0].position.x && initial[1].position.x == moons[1].position.x && initial[2].position.x == moons[2].position.x && initial[3].position.x == moons[3].position.x {
+            x_cycle = Some(n)
+        }
+
+        if y_cycle == None && initial[0].position.y == moons[0].position.y && initial[1].position.y == moons[1].position.y && initial[2].position.y == moons[2].position.y && initial[3].position.y == moons[3].position.y {
+            y_cycle = Some(n)
+        }
+
+        if z_cycle == None && initial[0].position.z == moons[0].position.z && initial[1].position.z == moons[1].position.z && initial[2].position.z == moons[2].position.z && initial[3].position.z == moons[3].position.z {
+            z_cycle = Some(n)
+        }
+
+        if let (Some(x), Some(y), Some(z)) = (x_cycle, y_cycle, z_cycle) {
+            let frequency = lcm(x, lcm(y, z));
+
+            // 303070460651184
+            println!("Day 12:B = {}", frequency);
+            break;
+        }
     }
-
-    let energy: i32 = moons.iter().map(Moon::total_energy).sum();
-
-    // 5517
-    println!("Day 12:A = {}", energy);
 }

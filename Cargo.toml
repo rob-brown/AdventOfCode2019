@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 regex = "1"
 permutohedron = "0.2.4"
+num="0.1.32"
