@@ -121,15 +121,30 @@ pub fn solve() {
 
         n += 1;
 
-        if x_cycle == None && initial[0].position.x == moons[0].position.x && initial[1].position.x == moons[1].position.x && initial[2].position.x == moons[2].position.x && initial[3].position.x == moons[3].position.x {
+        if x_cycle == None
+            && initial[0].position.x == moons[0].position.x
+            && initial[1].position.x == moons[1].position.x
+            && initial[2].position.x == moons[2].position.x
+            && initial[3].position.x == moons[3].position.x
+        {
             x_cycle = Some(n)
         }
 
-        if y_cycle == None && initial[0].position.y == moons[0].position.y && initial[1].position.y == moons[1].position.y && initial[2].position.y == moons[2].position.y && initial[3].position.y == moons[3].position.y {
+        if y_cycle == None
+            && initial[0].position.y == moons[0].position.y
+            && initial[1].position.y == moons[1].position.y
+            && initial[2].position.y == moons[2].position.y
+            && initial[3].position.y == moons[3].position.y
+        {
             y_cycle = Some(n)
         }
 
-        if z_cycle == None && initial[0].position.z == moons[0].position.z && initial[1].position.z == moons[1].position.z && initial[2].position.z == moons[2].position.z && initial[3].position.z == moons[3].position.z {
+        if z_cycle == None
+            && initial[0].position.z == moons[0].position.z
+            && initial[1].position.z == moons[1].position.z
+            && initial[2].position.z == moons[2].position.z
+            && initial[3].position.z == moons[3].position.z
+        {
             z_cycle = Some(n)
         }
 

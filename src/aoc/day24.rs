@@ -6,7 +6,7 @@ const CLEAR: char = '.';
 const BUG: char = '#';
 
 fn biodiversity(world: &World) -> usize {
-    let mut score  = 0;
+    let mut score = 0;
 
     for (n, x) in world.iter().enumerate() {
         if *x == BUG {
@@ -34,7 +34,10 @@ fn neighbors(x: i32, y: i32) -> Vec<(i32, i32)> {
 }
 
 fn neighbor_count(world: &World, x: i32, y: i32) -> usize {
-    neighbors(x, y).into_iter().filter(|(a, b)| has_bug(world, *a, *b)).count()
+    neighbors(x, y)
+        .into_iter()
+        .filter(|(a, b)| has_bug(world, *a, *b))
+        .count()
 }
 
 #[allow(dead_code)]
