@@ -12,8 +12,9 @@ fn mode_arg3(op_code: i64) -> i64 {
     (op_code % 100_000) / 10_000
 }
 
+#[derive(Debug)]
 pub struct Machine {
-    pub values: Vec<i64>,
+    pub values: Vec<i64>, // TODO: Switch to VecDeque
     pub ip: usize,
     pub halted: bool,
     pub positions: Vec<i64>,
