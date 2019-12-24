@@ -1,3 +1,4 @@
+pub mod assert;
 pub mod day1;
 pub mod day11;
 pub mod day12;

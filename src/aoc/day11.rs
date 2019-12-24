@@ -1,6 +1,6 @@
+use super::assert::*;
 use super::intcode::Machine;
-use core::cmp::max;
-use core::cmp::min;
+use core::cmp::{min, max};
 use std::collections::HashMap;
 
 enum Color {
@@ -106,8 +106,7 @@ pub fn solve() {
 
     let panels = run(&positions, Color::Black);
 
-    // 2129
-    println!("Day 9:A = {}", panels.len());
+    assert_eq(Day::new(9, Part::A), 2129, panels.len());
 
     let panels = run(&positions, Color::White);
 
@@ -134,5 +133,5 @@ pub fn solve() {
         println!();
     }
 
-    println!("Day 11:B = PECKRGZL");
+    assert_eq(Day::new(11, Part::B), "PECKRGZL", "PECKRGZL");
 }

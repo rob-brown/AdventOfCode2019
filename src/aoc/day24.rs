@@ -1,3 +1,4 @@
+use super::assert::*;
 use std::collections::HashSet;
 
 type World = Vec<char>;
@@ -80,8 +81,7 @@ pub fn solve() {
         // print_world(&current);
 
         if past.contains(&current) {
-            // 18401265
-            println!("Day 24:A = {}", biodiversity(&current));
+            assert_eq(Day::new(24, Part::A), 18_401_265, biodiversity(&current));
             break;
         } else {
             past.insert(current.clone());

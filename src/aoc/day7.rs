@@ -1,3 +1,4 @@
+use super::assert::*;
 use super::intcode::Machine;
 use core::cmp::max;
 use permutohedron::LexicalPermutation;
@@ -83,7 +84,7 @@ pub fn solve() {
         maximum = max(maximum, run_sequence(data.to_vec(), &positions));
     }
 
-    println!("Day 7:A = {}", maximum);
+    assert_eq(Day::new(7, Part::A), 38_500, maximum);
 
     let mut data = [5, 6, 7, 8, 9];
     let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &positions));
@@ -92,6 +93,5 @@ pub fn solve() {
         maximum = max(maximum, run_streaming_sequence(data.to_vec(), &positions));
     }
 
-    // 33660560
-    println!("Day 7:B = {}", maximum);
+    assert_eq(Day::new(7, Part::B), 33_660_560, maximum);
 }

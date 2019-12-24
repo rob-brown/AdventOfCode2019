@@ -1,3 +1,4 @@
+use super::assert::*;
 use super::intcode::Machine;
 
 pub fn solve() {
@@ -56,12 +57,10 @@ pub fn solve() {
     let mut machine = Machine::init(&positions);
     machine.run(vec![1]);
 
-    // 3906448201
-    println!("Day 9:A = {}", machine.values[0]);
+    assert_eq(Day::new(9, Part::A), 3_906_448_201, machine.values[0]);
 
     let mut machine = Machine::init(&positions);
     machine.run(vec![2]);
 
-    // 59785
-    println!("Day 9:A = {}", machine.values[0]);
+    assert_eq(Day::new(9, Part::B), 59_785, machine.values[0]);
 }

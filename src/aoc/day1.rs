@@ -1,3 +1,5 @@
+use super::assert::*;
+
 fn calculate_fuel(masses: &Vec<f32>) -> Vec<f32> {
     masses
         .iter()
@@ -24,8 +26,7 @@ pub fn solve() {
 
     let fuel: f32 = calculate_fuel(&modules).iter().sum();
 
-    // 3395944
-    println!("Day 1:A = {}", fuel);
+    assert_eq(Day::new(1, Part::A), 3_395_944, fuel as i32);
 
     let mut total_fuel: f32 = 0.0;
     let mut current = modules;
@@ -35,6 +36,5 @@ pub fn solve() {
         total_fuel += current.iter().sum::<f32>();
     }
 
-    // 5091036
-    println!("Day 1:B = {}", total_fuel);
+    assert_eq(Day::new(1, Part::B), 5_091_036, total_fuel as i32);
 }

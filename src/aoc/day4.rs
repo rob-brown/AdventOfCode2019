@@ -1,3 +1,5 @@
+use super::assert::*;
+
 type Password = (i32, i32, i32, i32, i32, i32);
 
 fn contains_repeated(x: Password) -> bool {
@@ -56,9 +58,6 @@ pub fn solve() {
         current = increment(current);
     }
 
-    // 481
-    println!("Day 4:A = {}", lax_count);
-
-    // 299
-    println!("Day 4:B = {}", strict_count);
+    assert_eq(Day::new(4, Part::A), 481, lax_count);
+    assert_eq(Day::new(4, Part::B), 299, strict_count);
 }

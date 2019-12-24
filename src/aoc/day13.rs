@@ -1,3 +1,4 @@
+use super::assert::*;
 use super::intcode::Machine;
 use std::collections::HashMap;
 
@@ -216,8 +217,7 @@ pub fn solve() {
 
     let count = screen.iter().filter(|(_, x)| **x == 2).count();
 
-    // 414
-    println!("Day 13:A = {}", count);
+    assert_eq(Day::new(12, Part::A), 414, count);
 
     let mut screen: HashMap<(i32, i32), i32> = HashMap::new();
     positions[0] = 2;
@@ -260,6 +260,5 @@ pub fn solve() {
         }
     }
 
-    // 20183
-    println!("Day 13:B = {}", score);
+    assert_eq(Day::new(13, Part::B), 20_183, score);
 }

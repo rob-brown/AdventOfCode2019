@@ -1,3 +1,4 @@
+use super::assert::*;
 use super::intcode::Machine;
 use core::cmp::{min, Ord, Ordering};
 use priority_queue::PriorityQueue;
@@ -228,7 +229,7 @@ pub fn solve() {
                 }
 
                 if *n == end {
-                    println!("Day 15:A = {}", min(*distance, alternate));
+                    assert_eq(Day::new(15, Part::A), 374, min(*distance, alternate));
                     break 'outer2;
                 }
             }

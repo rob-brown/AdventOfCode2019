@@ -1,6 +1,6 @@
+use super::assert::*;
 use regex::Regex;
-use std::collections::HashMap;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -57,13 +57,12 @@ pub fn solve() {
     let you = String::from("YOU");
     let santa = String::from("SAN");
 
-    println!("Day 6:A = {}", calculate_orbit_depth(&root, 0, &orbits));
+    assert_eq(Day::new(6, Part::A), 270_768, calculate_orbit_depth(&root, 0, &orbits));
 
     let mut you_path = Vec::new();
     path_to(&you, &you, &mut you_path, &child_to_parent);
 
     let mut santa_path = Vec::new();
     path_to(&santa, &santa, &mut santa_path, &child_to_parent);
-
-    println!("Day 6:B = {}", transit_length(you_path, santa_path));
+    assert_eq(Day::new(6, Part::B), 451, transit_length(you_path, santa_path))
 }

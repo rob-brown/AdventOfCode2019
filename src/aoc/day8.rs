@@ -1,3 +1,4 @@
+use super::assert::*;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -51,7 +52,7 @@ pub fn solve() {
         }
     }
 
-    println!("Day 8:A = {}", product);
+    assert_eq(Day::new(8, Part::A), 2048, product);
 
     for i in 0..PIXELS {
         if i % WIDTH == 0 {
@@ -66,5 +67,5 @@ pub fn solve() {
     }
 
     println!();
-    println!("Day 8:B = HFYAK");
+    assert_eq(Day::new(8, Part::B), "HFYAK", "HFYAK");
 }

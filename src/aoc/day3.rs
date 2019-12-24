@@ -1,3 +1,4 @@
+use super::assert::*;
 use std::cmp::min;
 use std::collections::HashMap;
 
@@ -168,9 +169,6 @@ pub fn solve() {
         }
     }
 
-    // 280
-    println!("Day 3:A = {}", distance);
-
-    // 10554
-    println!("Day 3:B = {}", combined_steps);
+    assert_eq(Day::new(3, Part::A), 280, distance);
+    assert_eq(Day::new(3, Part::B), 10_554, combined_steps);
 }

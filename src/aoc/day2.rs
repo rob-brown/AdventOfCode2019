@@ -1,3 +1,4 @@
+use super::assert::*;
 use super::intcode::Machine;
 
 pub fn solve() {
@@ -13,10 +14,9 @@ pub fn solve() {
     positions[1] = 12;
     positions[2] = 2;
 
-    // 2782414
     let mut machine = Machine::init(&positions);
     machine.run(vec![]);
-    println!("Day 2:A = {}", machine.positions[0]);
+    assert_eq(Day::new(2, Part::A), 2_782_414, machine.positions[0]);
 
     'outer: for noun in 0..100 {
         for verb in 0..100 {
@@ -27,8 +27,7 @@ pub fn solve() {
             machine.run(vec![]);
 
             if machine.positions[0] == 19690720 {
-                // 9820
-                println!("Day 2:B = {}", 100 * noun + verb);
+                assert_eq(Day::new(2, Part::B), 9820, 100 * noun + verb);
                 break 'outer;
             }
         }

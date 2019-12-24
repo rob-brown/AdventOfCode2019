@@ -1,3 +1,4 @@
+use super::assert::*;
 use num::integer::lcm;
 
 #[derive(Clone, Copy, Debug)]
@@ -115,8 +116,7 @@ pub fn solve() {
         if n == 1000 {
             let energy: i32 = moons.iter().map(Moon::total_energy).sum();
 
-            // 5517
-            println!("Day 12:A = {}", energy);
+            assert_eq(Day::new(12, Part::A), 5517, energy);
         }
 
         n += 1;
@@ -151,8 +151,7 @@ pub fn solve() {
         if let (Some(x), Some(y), Some(z)) = (x_cycle, y_cycle, z_cycle) {
             let frequency = lcm(x, lcm(y, z));
 
-            // 303070460651184
-            println!("Day 12:B = {}", frequency);
+            assert_eq(Day::new(12, Part::B), 303_070_460_651_184, frequency);
             break;
         }
     }
