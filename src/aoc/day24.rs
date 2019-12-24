@@ -55,8 +55,6 @@ pub fn solve() {
 
     let mut current: World = initial.clone();
 
-    print_world(&current);
-
     loop {
         let mut next = [CLEAR; 25];
 
@@ -76,7 +74,7 @@ pub fn solve() {
 
         current = next.iter().cloned().collect();
 
-        print_world(&current);
+        // print_world(&current);
 
         if past.contains(&current) {
             // 18401265

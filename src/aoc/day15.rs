@@ -56,20 +56,13 @@ fn clear_screen() {
 }
 
 #[allow(dead_code)]
-fn print_screen(screen: &HashMap<(i32, i32), i32>) {
+fn print_screen(screen: &HashSet<(i32, i32)>) {
     for y in -SCREEN_HEIGHT..SCREEN_HEIGHT {
         for x in -SCREEN_WIDTH..SCREEN_WIDTH {
-            match screen.get(&(x, y)).unwrap_or(&-1) {
-                // Wall
-                0 => print!("#"),
-
-                // Clear
-                1 => print!("."),
-
-                // Destination
-                2 => print!("X"),
-
-                _ => print!(" "),
+            if screen.contains(&(x, y)) {
+                print!(".");
+            } else {
+                print!(" ");
             }
         }
         println!();
@@ -77,26 +70,6 @@ fn print_screen(screen: &HashMap<(i32, i32), i32>) {
 
     println!();
 }
-
-// fn turn_left(direction: i32) -> i32 {
-//     match direction {
-//         1 => 4,
-//         2 => 1,
-//         3 => 2,
-//         4 => 3,
-//         _ => panic!(),
-//     }
-// }
-//
-// fn turn_right(direction: i32) -> i32 {
-//     match direction {
-//         1 => 2,
-//         2 => 3,
-//         3 => 4,
-//         4 => 1,
-//         _ => panic!(),
-//     }
-// }
 
 fn move_forward(point: (i32, i32), direction: Direction) -> (i32, i32) {
     match direction {
