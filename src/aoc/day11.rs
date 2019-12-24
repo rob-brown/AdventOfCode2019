@@ -1,6 +1,6 @@
 use super::assert::*;
 use super::intcode::Machine;
-use core::cmp::{min, max};
+use core::cmp::{max, min};
 use std::collections::HashMap;
 
 enum Color {

@@ -5,7 +5,7 @@ pub struct Day {
 
 impl Day {
     pub fn new(day: usize, part: Part) -> Self {
-        Self {day, part}
+        Self { day, part }
     }
 }
 
@@ -32,7 +32,10 @@ impl std::fmt::Display for Part {
     }
 }
 
-pub fn assert_eq<T: Eq>(day: Day, expected: T, result: T) where T: std::fmt::Display {
+pub fn assert_eq<T: Eq>(day: Day, expected: T, result: T)
+where
+    T: std::fmt::Display,
+{
     if expected == result {
         println!("Day {}:{} = {}", day.day, day.part, result);
     } else {
