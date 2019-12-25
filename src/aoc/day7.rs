@@ -54,43 +54,21 @@ fn run_streaming_sequence(sequence: Vec<i64>, positions: &Vec<i64>) -> i64 {
 }
 
 pub fn solve() {
-    let positions: Vec<i64> = vec![
-        3, 8, 1001, 8, 10, 8, 105, 1, 0, 0, 21, 38, 47, 64, 89, 110, 191, 272, 353, 434, 99999, 3,
-        9, 101, 4, 9, 9, 102, 3, 9, 9, 101, 5, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 5, 9, 4, 9, 99, 3, 9,
-        101, 2, 9, 9, 102, 5, 9, 9, 1001, 9, 5, 9, 4, 9, 99, 3, 9, 1001, 9, 5, 9, 102, 4, 9, 9,
-        1001, 9, 5, 9, 1002, 9, 2, 9, 1001, 9, 3, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 101, 4, 9, 9,
-        1002, 9, 4, 9, 1001, 9, 4, 9, 4, 9, 99, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9,
-        3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 101,
-        1, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4,
-        9, 3, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9,
-        102, 2, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9,
-        9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3,
-        9, 102, 2, 9, 9, 4, 9, 99, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 101,
-        1, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002, 9, 2, 9,
-        4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9,
-        101, 1, 9, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9,
-        1, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9,
-        3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002,
-        9, 2, 9, 4, 9, 99, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9,
-        4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9,
-        1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1002, 9,
-        2, 9, 4, 9, 99,
-    ];
-
+    let initial = Machine::from_file("input/day7.txt");
     let mut data = [0, 1, 2, 3, 4];
-    let mut maximum = max(0, run_sequence(data.to_vec(), &positions));
+    let mut maximum = max(0, run_sequence(data.to_vec(), &initial.positions));
 
     while data.next_permutation() {
-        maximum = max(maximum, run_sequence(data.to_vec(), &positions));
+        maximum = max(maximum, run_sequence(data.to_vec(), &initial.positions));
     }
 
     assert_eq(Day::new(7, Part::A), 38_500, maximum);
 
     let mut data = [5, 6, 7, 8, 9];
-    let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &positions));
+    let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &initial.positions));
 
     while data.next_permutation() {
-        maximum = max(maximum, run_streaming_sequence(data.to_vec(), &positions));
+        maximum = max(maximum, run_streaming_sequence(data.to_vec(), &initial.positions));
     }
 
     assert_eq(Day::new(7, Part::B), 33_660_560, maximum);
