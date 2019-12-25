@@ -1,6 +1,6 @@
 use super::assert::*;
 use super::intcode::Machine;
-use std::collections::{HashMap, VecDeque};
+use std::collections::VecDeque;
 
 const MACHINE_COUNT: i64 = 50;
 
@@ -13,7 +13,6 @@ struct Packet {
 pub fn solve() {
     let initial = Machine::from_file("input/day23.txt");
     let mut machines: Vec<Machine> = Vec::new();
-    let mut mailboxes: HashMap<i64, Vec<i64>> = HashMap::new();
     let mut messages: VecDeque<Packet> = VecDeque::new();
     let mut prev_y: Option<i64> = None;
     let mut nat: Option<(i64, i64)> = None;
@@ -23,7 +22,6 @@ pub fn solve() {
         let mut m = Machine::init(&initial.positions);
         m.run(vec![n as i64]);
         machines.push(m);
-        mailboxes.insert(n, Vec::new());
     }
 
     loop {
