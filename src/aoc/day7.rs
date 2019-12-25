@@ -68,7 +68,10 @@ pub fn solve() {
     let mut maximum = max(0, run_streaming_sequence(data.to_vec(), &initial.positions));
 
     while data.next_permutation() {
-        maximum = max(maximum, run_streaming_sequence(data.to_vec(), &initial.positions));
+        maximum = max(
+            maximum,
+            run_streaming_sequence(data.to_vec(), &initial.positions),
+        );
     }
 
     assert_eq(Day::new(7, Part::B), 33_660_560, maximum);
