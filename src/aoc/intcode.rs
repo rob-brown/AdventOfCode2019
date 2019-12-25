@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::prelude::*;
 
 fn mode_arg1(op_code: i64) -> i64 {
     (op_code % 1000) / 100
@@ -25,6 +27,15 @@ pub struct Machine {
 impl Machine {
     pub fn init(positions: &Vec<i64>) -> Self {
         Machine::new(Vec::new(), 0, false, positions.clone(), 0, HashMap::new())
+    }
+
+    pub fn from_file(path: &str) -> Self {
+        let mut file = File::open(path).unwrap();
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+
+        let program: Vec<i64> = contents.trim().split(',').map(|x| x.parse().unwrap()).collect();
+        Machine::init(&program)
     }
 
     pub fn new(
