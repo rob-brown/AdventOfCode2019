@@ -83,7 +83,7 @@ fn move_forward(point: (i32, i32), direction: Direction) -> (i32, i32) {
 
 fn step(machine: &mut Machine, direction: Direction) -> i32 {
     machine.run(vec![direction.to_int() as i64]);
-    machine.values.pop().unwrap() as i32
+    machine.values[0] as i32
 }
 
 // Used to turn max priority queue to min priority queue.

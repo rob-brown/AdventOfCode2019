@@ -45,8 +45,8 @@ fn run(positions: &Vec<i64>, start_color: Color) -> HashMap<(i32, i32), Color> {
 
         machine.run(vec![color.to_int()]);
 
-        let new_color = machine.values.pop().unwrap();
-        let turn = machine.values.pop().unwrap();
+        let new_color = machine.values.pop_front().unwrap();
+        let turn = machine.values.pop_front().unwrap();
 
         let (dir, point) = match (direction, turn) {
             (Direction::Up, 0) => (Direction::Left, (current.0 - 1, current.1)),

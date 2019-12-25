@@ -95,9 +95,9 @@ pub fn solve() {
         machine.run(vec![]);
 
         while machine.values.is_empty() == false {
-            let x = machine.values.pop().unwrap() as i32;
-            let y = machine.values.pop().unwrap() as i32;
-            let z = machine.values.pop().unwrap() as i32;
+            let x = machine.values.pop_front().unwrap() as i32;
+            let y = machine.values.pop_front().unwrap() as i32;
+            let z = machine.values.pop_front().unwrap() as i32;
 
             screen.insert((x, y), z);
         }
@@ -117,9 +117,9 @@ pub fn solve() {
         machine.run(vec![joystick_position]);
 
         while machine.values.is_empty() == false {
-            let x = machine.values.pop().unwrap() as i32;
-            let y = machine.values.pop().unwrap() as i32;
-            let z = machine.values.pop().unwrap() as i32;
+            let x = machine.values.pop_front().unwrap() as i32;
+            let y = machine.values.pop_front().unwrap() as i32;
+            let z = machine.values.pop_front().unwrap() as i32;
 
             if x == -1 && y == 0 {
                 score = z;

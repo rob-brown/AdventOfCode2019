@@ -10,6 +10,12 @@ struct Packet {
     value: i64,
 }
 
+impl Packet {
+    fn new(address: i64, value: i64) -> Self {
+        Self {address, value}
+    }
+}
+
 pub fn solve() {
     let initial = Machine::from_file("input/day23.txt");
     let mut machines: Vec<Machine> = Vec::new();
@@ -30,20 +36,21 @@ pub fn solve() {
             let input = vec![packet.value];
             m.run(input);
 
-            for p in m.values.rchunks_exact(3) {
-                let address = p[2];
-                let x = p[1];
-                let y = p[0];
+            let mut iterator = m.values.iter();
 
-                if address == 255 {
+            while let Some(address) = iterator.next() {
+                let x = iterator.next().unwrap();
+                let y = iterator.next().unwrap();
+
+                if *address == 255 {
                     if part_1_solved == false {
                         part_1_solved = true;
-                        assert_eq(Day::new(23, Part::A), 22_659, y);
+                        assert_eq(Day::new(23, Part::A), 22_659, *y);
                     }
-                    nat = Some((x, y));
+                    nat = Some((*x, *y));
                 } else {
-                    messages.push_back(Packet { address, value: x });
-                    messages.push_back(Packet { address, value: y });
+                    messages.push_back(Packet::new(*address, *x));
+                    messages.push_back(Packet::new(*address, *y));
                 }
             }
         }
@@ -56,20 +63,11 @@ pub fn solve() {
                 prev_y = Some(y);
             }
 
-            messages.push_back(Packet {
-                address: 0,
-                value: x,
-            });
-            messages.push_back(Packet {
-                address: 0,
-                value: y,
-            });
+            messages.push_back(Packet::new(0, x));
+            messages.push_back(Packet::new(0, y));
         } else {
             for n in 0..MACHINE_COUNT {
-                messages.push_back(Packet {
-                    address: n,
-                    value: -1,
-                });
+                messages.push_back(Packet::new(n, -1));
             }
         }
     }

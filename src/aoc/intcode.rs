@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
+use std::collections::{HashMap, VecDeque};
 
 fn mode_arg1(op_code: i64) -> i64 {
     (op_code % 1000) / 100
@@ -16,7 +16,7 @@ fn mode_arg3(op_code: i64) -> i64 {
 
 #[derive(Debug)]
 pub struct Machine {
-    pub values: Vec<i64>, // TODO: Switch to VecDeque
+    pub values: VecDeque<i64>,
     pub ip: usize,
     pub halted: bool,
     pub positions: Vec<i64>,
@@ -26,7 +26,7 @@ pub struct Machine {
 
 impl Machine {
     pub fn init(positions: &Vec<i64>) -> Self {
-        Machine::new(Vec::new(), 0, false, positions.clone(), 0, HashMap::new())
+        Machine::new(VecDeque::new(), 0, false, positions.clone(), 0, HashMap::new())
     }
 
     pub fn from_file(path: &str) -> Self {
@@ -43,7 +43,7 @@ impl Machine {
     }
 
     pub fn new(
-        values: Vec<i64>,
+        values: VecDeque<i64>,
         ip: usize,
         halted: bool,
         positions: Vec<i64>,
@@ -62,7 +62,7 @@ impl Machine {
 
     pub fn run(&mut self, inputs: Vec<i64>) {
         let mut inputs = inputs;
-        let mut output = Vec::new();
+        let mut output = VecDeque::new();
 
         loop {
             let op_code = self.read(self.ip);
@@ -98,7 +98,7 @@ impl Machine {
                 // Write output
                 4 => {
                     let value = self.lookup(mode_arg1(op_code), 1);
-                    output.push(value);
+                    output.push_back(value);
                     self.ip += 2;
                 }
 
@@ -150,8 +150,6 @@ impl Machine {
                 x => panic!("Invalid command {}", x),
             }
         }
-
-        output.reverse();
 
         self.values = output;
     }

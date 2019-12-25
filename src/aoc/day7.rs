@@ -25,29 +25,29 @@ fn run_streaming_sequence(sequence: Vec<i64>, positions: &Vec<i64>) -> i64 {
     // Run and initialize
     amp1.run(vec![0, sequence[0]]);
 
-    let mut inputs: Vec<i64> = amp1.values.clone();
+    let mut inputs: Vec<i64> = amp1.values.iter().cloned().collect();
     inputs.push(sequence[1]);
     amp2.run(inputs);
 
-    let mut inputs: Vec<i64> = amp2.values.clone();
+    let mut inputs: Vec<i64> = amp2.values.iter().cloned().collect();
     inputs.push(sequence[2]);
     amp3.run(inputs);
 
-    let mut inputs: Vec<i64> = amp3.values.clone();
+    let mut inputs: Vec<i64> = amp3.values.iter().cloned().collect();
     inputs.push(sequence[3]);
     amp4.run(inputs);
 
-    let mut inputs: Vec<i64> = amp4.values.clone();
+    let mut inputs: Vec<i64> = amp4.values.iter().cloned().collect();
     inputs.push(sequence[4]);
     amp5.run(inputs);
 
     // Loop until halt
     while amp5.halted == false {
-        amp1.run(amp5.values.clone());
-        amp2.run(amp1.values.clone());
-        amp3.run(amp2.values.clone());
-        amp4.run(amp3.values.clone());
-        amp5.run(amp4.values.clone());
+        amp1.run(amp5.values.iter().cloned().collect());
+        amp2.run(amp1.values.iter().cloned().collect());
+        amp3.run(amp2.values.iter().cloned().collect());
+        amp4.run(amp3.values.iter().cloned().collect());
+        amp5.run(amp4.values.iter().cloned().collect());
     }
 
     amp5.values[0]
