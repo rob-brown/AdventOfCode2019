@@ -34,7 +34,11 @@ impl Machine {
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
 
-        let program: Vec<i64> = contents.trim().split(',').map(|x| x.parse().unwrap()).collect();
+        let program: Vec<i64> = contents
+            .trim()
+            .split(',')
+            .map(|x| x.parse().unwrap())
+            .collect();
         Machine::init(&program)
     }
 
