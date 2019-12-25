@@ -26,7 +26,7 @@ pub fn solve() {
     // - astronaut ice cream
 
     loop {
-        let bytes: Vec<u8> = machine.values.iter().rev().map(|x| *x as u8).collect();
+        let bytes: Vec<u8> = machine.values.iter().map(|x| *x as u8).collect();
         machine.values.clear();
         let string = String::from_utf8(bytes).unwrap();
         println!("{}", string);
