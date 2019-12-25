@@ -11,6 +11,21 @@ fn run_command(machine: &mut Machine, command: String) {
     machine.run(input);
 }
 
+fn reboot(machine: &Machine) -> Machine {
+    let mut machine = Machine::init(&machine.positions);
+    machine.run(vec![]);
+    machine
+}
+
+fn rewind(commands: &mut Vec<String>, mut machine: &mut Machine) {
+    println!("Rewinding");
+    commands.pop();
+
+    for c in commands.iter() {
+        run_command(&mut machine, c.to_string());
+    }
+}
+
 #[allow(dead_code)]
 pub fn solve() {
     let initial = Machine::from_file("input/day25.txt");
@@ -33,14 +48,8 @@ pub fn solve() {
         // Restart
         if machine.halted {
             println!("Game Over!");
-            machine = Machine::init(&initial.positions);
-            machine.run(vec![]);
-            println!("Rewinding");
-            commands.pop();
-
-            for c in commands.iter() {
-                run_command(&mut machine, c.to_string());
-            }
+            machine = reboot(&initial);
+            rewind(&mut commands, &mut machine);
 
             continue;
         }
