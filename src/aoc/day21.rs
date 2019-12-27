@@ -1,6 +1,5 @@
 use super::assert::*;
 use super::intcode::Machine;
-use std::io::stdin;
 
 pub fn solve() {
     let initial = Machine::from_file("input/day21.txt");

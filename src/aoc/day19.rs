@@ -1,6 +1,5 @@
 use super::assert::*;
 use super::intcode::Machine;
-use std::collections::HashSet;
 
 pub fn solve() {
     let mut machine = Machine::from_file("input/day19.txt");
