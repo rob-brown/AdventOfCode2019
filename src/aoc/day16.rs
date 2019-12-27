@@ -24,7 +24,13 @@ pub fn solve() {
             let zero = iter::repeat(0).take(n + 1);
             let one = iter::repeat(1).take(n + 1);
             let neg_one = iter::repeat(-1).take(n + 1);
-            let mut sequence = zero.clone().chain(one).chain(zero).chain(neg_one).cycle().skip(1);
+            let mut sequence = zero
+                .clone()
+                .chain(one)
+                .chain(zero)
+                .chain(neg_one)
+                .cycle()
+                .skip(1);
 
             for y in current.iter() {
                 sum += y * sequence.next().unwrap();
@@ -35,7 +41,13 @@ pub fn solve() {
         current = next;
     }
 
-    let answer = current.iter().cloned().take(8).map(|x| x.to_string()).collect::<Vec<String>>().join("");
+    let answer = current
+        .iter()
+        .cloned()
+        .take(8)
+        .map(|x| x.to_string())
+        .collect::<Vec<String>>()
+        .join("");
 
     assert_eq(Day::new(16, Part::A), "23135243", &answer);
 }
