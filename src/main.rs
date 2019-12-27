@@ -27,6 +27,7 @@ fn solve_all() {
     time(aoc::day13::solve);
     time(aoc::day15::solve);
     time(aoc::day16::solve);
+    time(aoc::day17::solve);
     time(aoc::day23::solve);
     time(aoc::day24::solve);
     // time(aoc::day25::solve);
