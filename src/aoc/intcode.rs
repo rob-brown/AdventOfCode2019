@@ -1,6 +1,6 @@
+use std::collections::{HashMap, VecDeque};
 use std::fs::File;
 use std::io::prelude::*;
-use std::collections::{HashMap, VecDeque};
 
 fn mode_arg1(op_code: i64) -> i64 {
     (op_code % 1000) / 100
@@ -26,7 +26,14 @@ pub struct Machine {
 
 impl Machine {
     pub fn init(positions: &Vec<i64>) -> Self {
-        Machine::new(VecDeque::new(), 0, false, positions.clone(), 0, HashMap::new())
+        Machine::new(
+            VecDeque::new(),
+            0,
+            false,
+            positions.clone(),
+            0,
+            HashMap::new(),
+        )
     }
 
     pub fn from_file(path: &str) -> Self {

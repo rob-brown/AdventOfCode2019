@@ -12,7 +12,7 @@ struct Packet {
 
 impl Packet {
     fn new(address: i64, value: i64) -> Self {
-        Self {address, value}
+        Self { address, value }
     }
 }
 
