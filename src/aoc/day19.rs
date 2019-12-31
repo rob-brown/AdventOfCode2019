@@ -20,7 +20,7 @@ pub fn solve() {
         }
     }
 
-    assert_eq(Day::new(19, Part::B), 171, count);
+    assert_eq(Day::new(19, Part::A), 171, count);
 
     let mut current = (0, 100);
 
