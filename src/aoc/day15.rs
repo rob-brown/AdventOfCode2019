@@ -1,6 +1,7 @@
 use super::assert::*;
 use super::intcode::Machine;
-use core::cmp::{min, Ord, Ordering};
+use std::cmp::Reverse;
+use core::cmp::min;
 use priority_queue::PriorityQueue;
 use std::collections::{HashMap, HashSet};
 
@@ -86,34 +87,6 @@ fn step(machine: &mut Machine, direction: Direction) -> i32 {
     machine.values[0] as i32
 }
 
-// Used to turn max priority queue to min priority queue.
-#[derive(PartialEq, Eq, Debug)]
-struct Priority {
-    value: i32,
-}
-
-impl Priority {
-    fn new(value: i32) -> Self {
-        Self { value }
-    }
-}
-
-impl Ord for Priority {
-    fn cmp(&self, other: &Self) -> Ordering {
-        match self.value.cmp(&other.value) {
-            Ordering::Less => Ordering::Greater,
-            Ordering::Equal => Ordering::Equal,
-            Ordering::Greater => Ordering::Less,
-        }
-    }
-}
-
-impl PartialOrd for Priority {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
 pub fn solve() {
     let mut map: HashSet<(i32, i32)> = HashSet::new();
     let mut machine = Machine::from_file("input/day15.txt");
@@ -152,28 +125,28 @@ pub fn solve() {
         // clear_screen();
     }
 
-    let mut queue: PriorityQueue<(i32, i32), Priority> = PriorityQueue::new();
+    let mut queue: PriorityQueue<(i32, i32), Reverse<i32>> = PriorityQueue::new();
     let mut distances: HashMap<(i32, i32), i32> = HashMap::new();
     const MAX_DISTANCE: i32 = 10_000;
 
     for (x, y) in map.iter() {
-        queue.push((*x, *y), Priority::new(MAX_DISTANCE));
+        queue.push((*x, *y), Reverse(MAX_DISTANCE));
     }
 
     distances.insert((0, 0), 0);
-    queue.push((0, 0), Priority::new(0));
+    queue.push((0, 0), Reverse(0));
 
-    'outer2: while let Some(((x, y), d)) = queue.pop() {
+    'outer2: while let Some(((x, y), Reverse(d))) = queue.pop() {
         let neighbors = [(x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y)];
 
         for n in neighbors.iter() {
             if map.contains(&n) {
                 let distance = distances.entry(*n).or_insert(MAX_DISTANCE);
-                let alternate = d.value + 1;
+                let alternate = d + 1;
 
                 if alternate < *distance {
                     *distance = alternate;
-                    queue.change_priority(n, Priority::new(alternate));
+                    queue.change_priority(n, Reverse(alternate));
                 }
 
                 if *n == end {
