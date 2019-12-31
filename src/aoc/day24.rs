@@ -15,12 +15,12 @@ impl Eq for World {}
 impl World {
     fn empty() -> Self {
         let cells = [CLEAR; 25].to_vec();
-        World {cells}
+        World { cells }
     }
 
     fn from_str(str: &str) -> Self {
         let cells = str.chars().collect();
-        World {cells}
+        World { cells }
     }
 
     fn has_bug(&self, x: i32, y: i32) -> bool {
@@ -104,7 +104,11 @@ enum HyperWorld {
 
 impl HyperWorld {
     fn init(world: World) -> Self {
-        HyperWorld::Root(world, Box::new(HyperWorld::UpperEmpty), Box::new(HyperWorld::LowerEmpty))
+        HyperWorld::Root(
+            world,
+            Box::new(HyperWorld::UpperEmpty),
+            Box::new(HyperWorld::LowerEmpty),
+        )
     }
 
     fn bug_count(&self) -> usize {
@@ -113,13 +117,9 @@ impl HyperWorld {
                 HyperWorld::bug_count(above) + HyperWorld::bug_count(below) + world.bug_count()
             }
 
-            HyperWorld::UpperBranch(world, next) => {
-                HyperWorld::bug_count(next) + world.bug_count()
-            }
+            HyperWorld::UpperBranch(world, next) => HyperWorld::bug_count(next) + world.bug_count(),
 
-            HyperWorld::LowerBranch(world, next) => {
-                HyperWorld::bug_count(next) + world.bug_count()
-            }
+            HyperWorld::LowerBranch(world, next) => HyperWorld::bug_count(next) + world.bug_count(),
 
             HyperWorld::UpperEmpty => 0,
 
@@ -141,7 +141,11 @@ impl HyperWorld {
         match (self, previous) {
             (HyperWorld::Root(world, above, below), _) => {
                 let new_world = HyperWorld::step_world(world, &above.world(), &below.world());
-                HyperWorld::Root(new_world, Box::new(above.step(Some(world))), Box::new(below.step(Some(world))))
+                HyperWorld::Root(
+                    new_world,
+                    Box::new(above.step(Some(world))),
+                    Box::new(below.step(Some(world))),
+                )
             }
 
             (HyperWorld::UpperBranch(world, next), Some(prev)) => {
@@ -206,11 +210,16 @@ impl HyperWorld {
 
     fn neighbor_bug_count(world: &World, above: &World, below: &World, x: i32, y: i32) -> usize {
         // Immediate neighbors
-        let mut list = vec![(world, x + 1, y), (world, x - 1, y), (world, x, y + 1), (world, x, y - 1)]
-            .into_iter()
-            .filter(|(_, a, b)| (0..5).contains(a) && (0..5).contains(b))
-            .map(|(w, a, b)| w.has_bug(a, b))
-            .collect::<Vec<bool>>();
+        let mut list = vec![
+            (world, x + 1, y),
+            (world, x - 1, y),
+            (world, x, y + 1),
+            (world, x, y - 1),
+        ]
+        .into_iter()
+        .filter(|(_, a, b)| (0..5).contains(a) && (0..5).contains(b))
+        .map(|(w, a, b)| w.has_bug(a, b))
+        .collect::<Vec<bool>>();
 
         // Edge neighbors to upper world.
         if x == 0 {
@@ -227,45 +236,37 @@ impl HyperWorld {
 
         // Center neighbors to lower world.
         match (x, y) {
-            (1, 2) => {
-                list.append(&mut vec![
-                    below.has_bug(0, 0),
-                    below.has_bug(0, 1),
-                    below.has_bug(0, 2),
-                    below.has_bug(0, 3),
-                    below.has_bug(0, 4),
-                    ])
-            }
+            (1, 2) => list.append(&mut vec![
+                below.has_bug(0, 0),
+                below.has_bug(0, 1),
+                below.has_bug(0, 2),
+                below.has_bug(0, 3),
+                below.has_bug(0, 4),
+            ]),
 
-            (2, 1) => {
-                list.append(&mut vec![
-                    below.has_bug(0, 0),
-                    below.has_bug(1, 0),
-                    below.has_bug(2, 0),
-                    below.has_bug(3, 0),
-                    below.has_bug(4, 0),
-                    ])
-            }
+            (2, 1) => list.append(&mut vec![
+                below.has_bug(0, 0),
+                below.has_bug(1, 0),
+                below.has_bug(2, 0),
+                below.has_bug(3, 0),
+                below.has_bug(4, 0),
+            ]),
 
-            (3, 2) => {
-                list.append(&mut vec![
-                    below.has_bug(4, 0),
-                    below.has_bug(4, 1),
-                    below.has_bug(4, 2),
-                    below.has_bug(4, 3),
-                    below.has_bug(4, 4),
-                    ])
-            }
+            (3, 2) => list.append(&mut vec![
+                below.has_bug(4, 0),
+                below.has_bug(4, 1),
+                below.has_bug(4, 2),
+                below.has_bug(4, 3),
+                below.has_bug(4, 4),
+            ]),
 
-            (2, 3) => {
-                list.append(&mut vec![
-                    below.has_bug(0, 4),
-                    below.has_bug(1, 4),
-                    below.has_bug(2, 4),
-                    below.has_bug(3, 4),
-                    below.has_bug(4, 4),
-                    ])
-            }
+            (2, 3) => list.append(&mut vec![
+                below.has_bug(0, 4),
+                below.has_bug(1, 4),
+                below.has_bug(2, 4),
+                below.has_bug(3, 4),
+                below.has_bug(4, 4),
+            ]),
 
             _ => (),
         }

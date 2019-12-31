@@ -95,6 +95,9 @@ pub fn solve() {
         }
     }
 
-    assert_eq(Day::new(22, Part::A), 5755, track_position(2019, &commands, CARD_COUNT));
-    assert_eq(Day::new(22, Part::B), 42152620178084, poly(2020, &commands));
+    let position = track_position(2019, &commands, CARD_COUNT);
+    assert_eq(Day::new(22, Part::A), 5755, position);
+
+    let card = poly(2020, &commands);
+    assert_eq(Day::new(22, Part::B), 42152620178084, card);
 }
