@@ -73,7 +73,7 @@ pub fn solve() {
     let initial = Machine::from_file("input/day11.txt");
     let panels = run(&initial.positions, Color::Black);
 
-    assert_eq(Day::new(9, Part::A), 2129, panels.len());
+    assert_eq(Day::new(11, Part::A), 2129, panels.len());
 
     let panels = run(&initial.positions, Color::White);
 
