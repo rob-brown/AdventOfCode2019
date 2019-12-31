@@ -65,7 +65,8 @@ pub fn solve() {
         "R,6,L,6,R,12",
         "n",
         "",
-    ].join("\n")
+    ]
+    .join("\n")
     .chars()
     .map(|x| x as i64)
     .rev()

@@ -32,15 +32,15 @@ pub fn solve() {
 
             if in_beam(top_right, &machine) {
                 break;
-            }
-            else {
+            } else {
                 current = (current.0, current.1 + 1);
             }
-        }
-        else {
+        } else {
             current = (current.0 + 1, current.1);
         }
     }
 
-    assert_eq(Day::new(19, Part::B), 9_741_242, current.0 * 10_000 + current.1);
+    let result = current.0 * 10_000 + current.1;
+
+    assert_eq(Day::new(19, Part::B), 9_741_242, result);
 }
