@@ -16,13 +16,13 @@ fn is_intersection(point: (i32, i32), map: &HashSet<(i32, i32)>) -> bool {
 }
 
 pub fn solve() {
-    let mut machine = Machine::from_file("input/day17.txt");
+    let initial = Machine::from_file("input/day17.txt");
+    let mut machine = Machine::init(&initial.positions);
     machine.run(vec![]);
 
     let mut map: HashSet<(i32, i32)> = HashSet::new();
     let mut x = 0;
     let mut y = 0;
-    let mut robot = (0, 0);
 
     for c in machine.values {
         match c as u8 as char {
@@ -37,7 +37,6 @@ pub fn solve() {
             }
 
             '^' => {
-                robot = (x, y);
                 map.insert((x, y));
                 x += 1;
             }
@@ -55,4 +54,25 @@ pub fn solve() {
         .sum();
 
     assert_eq(Day::new(17, Part::A), 6052, sum);
+
+    let mut machine = Machine::init(&initial.positions);
+    machine.positions[0] = 2;
+
+    let commands = [
+        "A,C,C,B,A,C,B,A,C,B",
+        "L,6,R,12,L,4,L,6",
+        "L,6,L,10,L,10,R,6",
+        "R,6,L,6,R,12",
+        "n",
+        "",
+    ].join("\n")
+    .chars()
+    .map(|x| x as i64)
+    .rev()
+    .collect::<Vec<i64>>();
+    machine.run(commands);
+
+    let dust = machine.values.pop_back().unwrap();
+
+    assert_eq(Day::new(17, Part::B), 752_491, dust);
 }
