@@ -1,12 +1,14 @@
 use super::assert::*;
 use super::intcode::Machine;
 use std::cmp::Reverse;
-use core::cmp::min;
+use core::cmp::{min, max};
 use priority_queue::PriorityQueue;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 
 const SCREEN_WIDTH: i32 = 20;
 const SCREEN_HEIGHT: i32 = 20;
+
+struct Drone((i32, i32), Machine, Direction, i32);
 
 #[derive(Clone, Copy, Debug)]
 enum Direction {
@@ -89,12 +91,13 @@ fn step(machine: &mut Machine, direction: Direction) -> i32 {
 
 pub fn solve() {
     let mut map: HashSet<(i32, i32)> = HashSet::new();
-    let mut machine = Machine::from_file("input/day15.txt");
+    let initial = Machine::from_file("input/day15.txt");
+    let mut machine = Machine::init(&initial.positions);
     let mut current = (0, 0);
     let mut direction = Direction::North;
     let end: (i32, i32);
 
-    'outer: loop {
+    loop {
         let next = move_forward(current, direction);
         let response = step(&mut machine, direction);
 
@@ -113,7 +116,7 @@ pub fn solve() {
             2 => {
                 map.insert(next);
                 end = next;
-                break 'outer;
+                break;
             }
 
             _ => panic!(),
@@ -136,7 +139,7 @@ pub fn solve() {
     distances.insert((0, 0), 0);
     queue.push((0, 0), Reverse(0));
 
-    'outer2: while let Some(((x, y), Reverse(d))) = queue.pop() {
+    'outer: while let Some(((x, y), Reverse(d))) = queue.pop() {
         let neighbors = [(x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y)];
 
         for n in neighbors.iter() {
@@ -151,9 +154,36 @@ pub fn solve() {
 
                 if *n == end {
                     assert_eq(Day::new(15, Part::A), 374, min(*distance, alternate));
-                    break 'outer2;
+                    break 'outer;
                 }
             }
         }
     }
+
+    let mut drones: VecDeque<Drone> = VecDeque::new();
+    let mut map: HashSet<(i32, i32)> = HashSet::new();
+    let mut max_steps = 0;
+
+    drones.push_back(Drone(end, machine.clone(), Direction::North, 1));
+    drones.push_back(Drone(end, machine.clone(), Direction::South, 1));
+    drones.push_back(Drone(end, machine.clone(), Direction::East, 1));
+    drones.push_back(Drone(end, machine.clone(), Direction::West, 1));
+
+    while let Some(Drone(location, mut machine, direction, steps)) = drones.pop_front() {
+        if step(&mut machine, direction) == 1 {
+            max_steps = max(max_steps, steps);
+            map.insert(move_forward(location, direction));
+            let mut clones: VecDeque<Drone> = [
+                direction,
+                direction.turn_left(),
+                direction.turn_right(),
+            ]
+            .iter()
+            .map(|d| Drone(move_forward(location, *d), machine.clone(), *d, steps + 1))
+            .collect();
+            drones.append(&mut clones);
+        }
+    }
+
+    assert_eq(Day::new(15, Part::B), 482, max_steps);
 }

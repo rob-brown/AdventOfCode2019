@@ -2,14 +2,22 @@ use std::collections::{HashMap, VecDeque};
 use std::fs::File;
 use std::io::prelude::*;
 
+// NOTE: I could make cloning cheap by making the initial program read only and share between instances.
+// Writes would go to the extended memory.
+// Reads would go to extended memory, if present, then the initial program.
+// Doing this seems to make reads much slower though.
+
+#[inline(always)]
 fn mode_arg1(op_code: i64) -> i64 {
     (op_code % 1000) / 100
 }
 
+#[inline(always)]
 fn mode_arg2(op_code: i64) -> i64 {
     (op_code % 10_000) / 1000
 }
 
+#[inline(always)]
 fn mode_arg3(op_code: i64) -> i64 {
     (op_code % 100_000) / 10_000
 }
@@ -22,6 +30,12 @@ pub struct Machine {
     pub positions: Vec<i64>,
     pub relative_base: i64,
     pub extended_memory: HashMap<usize, i64>,
+}
+
+impl Clone for Machine {
+    fn clone(&self) -> Self {
+        Machine::new(self.values.clone(), self.ip, self.halted, self.positions.clone(), self.relative_base, self.extended_memory.clone())
+    }
 }
 
 impl Machine {
@@ -196,7 +210,7 @@ impl Machine {
         }
     }
 
-    fn read(&self, offset: usize) -> i64 {
+    pub fn read(&self, offset: usize) -> i64 {
         if offset < self.positions.len() {
             self.positions[offset]
         } else {
