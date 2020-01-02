@@ -1,8 +1,8 @@
 use super::assert::*;
 use super::intcode::Machine;
-use std::cmp::Reverse;
-use core::cmp::{min, max};
+use core::cmp::{max, min};
 use priority_queue::PriorityQueue;
+use std::cmp::Reverse;
 use std::collections::{HashMap, HashSet, VecDeque};
 
 const SCREEN_WIDTH: i32 = 20;
@@ -173,14 +173,11 @@ pub fn solve() {
         if step(&mut machine, direction) == 1 {
             max_steps = max(max_steps, steps);
             map.insert(move_forward(location, direction));
-            let mut clones: VecDeque<Drone> = [
-                direction,
-                direction.turn_left(),
-                direction.turn_right(),
-            ]
-            .iter()
-            .map(|d| Drone(move_forward(location, *d), machine.clone(), *d, steps + 1))
-            .collect();
+            let mut clones: VecDeque<Drone> =
+                [direction, direction.turn_left(), direction.turn_right()]
+                    .iter()
+                    .map(|d| Drone(move_forward(location, *d), machine.clone(), *d, steps + 1))
+                    .collect();
             drones.append(&mut clones);
         }
     }

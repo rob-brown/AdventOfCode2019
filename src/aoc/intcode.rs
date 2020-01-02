@@ -34,7 +34,14 @@ pub struct Machine {
 
 impl Clone for Machine {
     fn clone(&self) -> Self {
-        Machine::new(self.values.clone(), self.ip, self.halted, self.positions.clone(), self.relative_base, self.extended_memory.clone())
+        Machine::new(
+            self.values.clone(),
+            self.ip,
+            self.halted,
+            self.positions.clone(),
+            self.relative_base,
+            self.extended_memory.clone(),
+        )
     }
 }
 

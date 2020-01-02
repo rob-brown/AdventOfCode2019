@@ -1,11 +1,11 @@
 use super::assert::*;
+use core::cmp::Ordering;
+use core::f32::consts::{FRAC_PI_4, PI};
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufRead, BufReader};
-use core::cmp::Ordering;
-use core::f32::consts::{PI, FRAC_PI_4};
 
 const TAU: f32 = PI * 2.0;
 
@@ -75,11 +75,14 @@ pub fn solve() {
 
     assert_eq(Day::new(10, Part::A), 309, maximum);
 
-    let mut info: Vec<((usize, usize), f32)> = visible
-            .values()
-            .map(|(p, a, _)| (*p, *a))
-            .collect();
-    info.sort_by(|(_, a1), (_, a2)| if a1 < a2 { Ordering::Less } else { Ordering::Greater });
+    let mut info: Vec<((usize, usize), f32)> = visible.values().map(|(p, a, _)| (*p, *a)).collect();
+    info.sort_by(|(_, a1), (_, a2)| {
+        if a1 < a2 {
+            Ordering::Less
+        } else {
+            Ordering::Greater
+        }
+    });
     let ((x, y), _) = info[200];
 
     assert_eq(Day::new(10, Part::B), 416, x * 100 + y)
