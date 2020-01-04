@@ -1,6 +1,6 @@
 use super::assert::*;
 use super::intcode::Machine;
-use core::cmp::{max, min};
+use core::cmp::max;
 use priority_queue::PriorityQueue;
 use std::cmp::Reverse;
 use std::collections::{HashMap, HashSet, VecDeque};
@@ -153,7 +153,7 @@ pub fn solve() {
                 }
 
                 if *n == end {
-                    assert_eq(Day::new(15, Part::A), 374, min(*distance, alternate));
+                    assert_eq(Day::new(15, Part::A), 374, *distance);
                     break 'outer;
                 }
             }
