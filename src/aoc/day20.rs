@@ -1,11 +1,12 @@
 use super::assert::*;
 use priority_queue::PriorityQueue;
-use std::cmp::Reverse;
+use std::cmp::{max, Reverse};
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 type Point = (i32, i32);
+type RecursivePoint = (Point, i32);
 
 pub fn solve() {
     let mut seen_letters: HashMap<Point, char> = HashMap::new();
@@ -14,10 +15,16 @@ pub fn solve() {
     let mut path: HashSet<Point> = HashSet::new();
     let mut start = Point::default();
     let mut end = Point::default();
+    let mut line_count = 0;
+    let mut line_width = 0;
 
     let file = File::open("input/day20.txt").unwrap();
     for (y, line) in BufReader::new(file).lines().enumerate() {
+        let mut temp_width = 0;
+        line_count += 1;
+
         for (x, char) in String::from(line.unwrap()).chars().enumerate() {
+            temp_width += 1;
             let x = x as i32;
             let y = y as i32;
             let point = (x, y);
@@ -48,7 +55,6 @@ pub fn solve() {
                     } else {
                         portals_by_name.insert(name, portal_point);
                     }
-
                 } else if let Some((_, letter)) = seen_letters.remove_entry(&up) {
                     let bytes = vec![letter as u8, char as u8];
                     let name = String::from_utf8(bytes).unwrap();
@@ -74,6 +80,8 @@ pub fn solve() {
                 }
             }
         }
+
+        line_width = max(line_width, temp_width);
     }
 
     let mut queue: PriorityQueue<Point, Reverse<i32>> = PriorityQueue::new();
@@ -103,5 +111,46 @@ pub fn solve() {
         }
     }
 
+    let mut queue: PriorityQueue<RecursivePoint, Reverse<i32>> = PriorityQueue::new();
+    let mut explored: HashSet<RecursivePoint> = HashSet::new();
 
+    queue.push((start, 0), Reverse(0));
+
+    while let Some((node, Reverse(d))) = queue.pop() {
+        let (point, depth) = node;
+        let (x, y) = point;
+        if point == end && depth == 0 {
+            assert_eq(Day::new(20, Part::B), 7186, d);
+            break;
+        }
+
+        explored.insert(node);
+
+        let mut neighbors = vec![
+            ((x, y - 1), depth),
+            ((x, y + 1), depth),
+            ((x - 1, y), depth),
+            ((x + 1, y), depth),
+        ];
+
+        if let Some(portal) = portals.get(&point) {
+            // Outer portals go up, inner portals go down.
+            let next = if x == 2 || y == 2 || x == line_width - 3 || y == line_count - 3 {
+                depth - 1
+            } else {
+                depth + 1
+            };
+
+            // Don't allow portals above the top level.
+            if next >= 0 {
+                neighbors.push((*portal, next));
+            }
+        }
+
+        for n in neighbors.iter() {
+            if path.contains(&n.0) && explored.contains(n) == false {
+                queue.push(*n, Reverse(d + 1));
+            }
+        }
+    }
 }
