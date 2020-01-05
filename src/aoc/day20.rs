@@ -23,7 +23,7 @@ pub fn solve() {
         let mut temp_width = 0;
         line_count += 1;
 
-        for (x, char) in String::from(line.unwrap()).chars().enumerate() {
+        'mid: for (x, char) in String::from(line.unwrap()).chars().enumerate() {
             temp_width += 1;
             let x = x as i32;
             let y = y as i32;
@@ -32,52 +32,37 @@ pub fn solve() {
             if char == '.' {
                 path.insert(point);
             } else if char.is_ascii_uppercase() {
-                let left = (x - 1, y);
-                let up = (x, y - 1);
+                let info = [
+                    ((x - 1, y), (x - 2, y), (point.0 + 1, point.1)),
+                    ((x, y - 1), (x, y - 2), (point.0, point.1 + 1)),
+                ];
 
-                if let Some((_, letter)) = seen_letters.remove_entry(&left) {
-                    let bytes = vec![letter as u8, char as u8];
-                    let name = String::from_utf8(bytes).unwrap();
+                for &(prev, prev_prev, next) in info.iter() {
+                    if let Some((_, letter)) = seen_letters.remove_entry(&prev) {
+                        let bytes = vec![letter as u8, char as u8];
+                        let name = String::from_utf8(bytes).unwrap();
 
-                    let portal_point = if path.contains(&(x - 2, y)) {
-                        (x - 2, y)
-                    } else {
-                        (point.0 + 1, point.1)
-                    };
+                        let portal_point = if path.contains(&prev_prev) {
+                            prev_prev
+                        } else {
+                            next
+                        };
 
-                    if &name == "AA" {
-                        start = portal_point;
-                    } else if &name == "ZZ" {
-                        end = portal_point;
-                    } else if let Some((_, portal)) = portals_by_name.remove_entry(&name) {
-                        portals.insert(portal, portal_point);
-                        portals.insert(portal_point, portal);
-                    } else {
-                        portals_by_name.insert(name, portal_point);
+                        if &name == "AA" {
+                            start = portal_point;
+                        } else if &name == "ZZ" {
+                            end = portal_point;
+                        } else if let Some((_, portal)) = portals_by_name.remove_entry(&name) {
+                            portals.insert(portal, portal_point);
+                            portals.insert(portal_point, portal);
+                        } else {
+                            portals_by_name.insert(name, portal_point);
+                        }
+                        continue 'mid;
                     }
-                } else if let Some((_, letter)) = seen_letters.remove_entry(&up) {
-                    let bytes = vec![letter as u8, char as u8];
-                    let name = String::from_utf8(bytes).unwrap();
-
-                    let portal_point = if path.contains(&(x, y - 2)) {
-                        (x, y - 2)
-                    } else {
-                        (point.0, point.1 + 1)
-                    };
-
-                    if &name == "AA" {
-                        start = portal_point;
-                    } else if &name == "ZZ" {
-                        end = portal_point;
-                    } else if let Some((_, portal)) = portals_by_name.remove_entry(&name) {
-                        portals.insert(portal, portal_point);
-                        portals.insert(portal_point, portal);
-                    } else {
-                        portals_by_name.insert(name, portal_point);
-                    }
-                } else {
-                    seen_letters.insert(point, char);
                 }
+
+                seen_letters.insert(point, char);
             }
         }
 
