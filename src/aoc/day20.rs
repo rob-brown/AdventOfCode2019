@@ -8,7 +8,26 @@ use std::io::{BufRead, BufReader};
 type Point = (i32, i32);
 type RecursivePoint = (Point, i32);
 
+struct Map {
+    path: HashSet<Point>,
+    portals: HashMap<Point, Point>,
+    start: Point,
+    end: Point,
+    line_width: i32,
+    line_count: i32,
+}
+
 pub fn solve() {
+    let map = parse_map();
+
+    let distance = shortest_distance(&map);
+    assert_eq(Day::new(20, Part::A), 606, distance);
+
+    let recursive_distance = shortest_recursive_distance(&map);
+    assert_eq(Day::new(20, Part::B), 7186, recursive_distance);
+}
+
+fn parse_map() -> Map {
     let mut seen_letters: HashMap<Point, char> = HashMap::new();
     let mut portals_by_name: HashMap<String, Point> = HashMap::new();
     let mut portals: HashMap<Point, Point> = HashMap::new();
@@ -69,20 +88,26 @@ pub fn solve() {
         line_width = max(line_width, temp_width);
     }
 
+    Map { path, portals, start, end, line_width, line_count }
+}
+
+fn shortest_distance(map: &Map) -> i32 {
+    let Map { path, portals, start, end, line_width: _, line_count: _ } = map;
     let mut queue: PriorityQueue<Point, Reverse<i32>> = PriorityQueue::new();
     let mut explored: HashSet<Point> = HashSet::new();
 
-    queue.push(start, Reverse(0));
+    queue.push(*start, Reverse(0));
 
-    'outer: while let Some((point, Reverse(d))) = queue.pop() {
-        let (x, y) = point;
-        if point == end {
-            assert_eq(Day::new(20, Part::A), 606, d);
-            break;
+    loop {
+        let (point, Reverse(d)) = queue.pop().unwrap();
+
+        if point == *end {
+            return d;
         }
 
-        explored.insert((x, y));
+        explored.insert(point);
 
+        let (x, y) = point;
         let mut neighbors = vec![(x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y)];
 
         if let Some(portal) = portals.get(&point) {
@@ -95,22 +120,26 @@ pub fn solve() {
             }
         }
     }
+}
 
+fn shortest_recursive_distance(map: &Map) -> i32 {
+    let Map { path, portals, start, end, line_width, line_count } = map;
     let mut queue: PriorityQueue<RecursivePoint, Reverse<i32>> = PriorityQueue::new();
     let mut explored: HashSet<RecursivePoint> = HashSet::new();
 
-    queue.push((start, 0), Reverse(0));
+    queue.push((*start, 0), Reverse(0));
 
-    while let Some((node, Reverse(d))) = queue.pop() {
+    loop {
+        let (node, Reverse(d)) = queue.pop().unwrap();
         let (point, depth) = node;
-        let (x, y) = point;
-        if point == end && depth == 0 {
-            assert_eq(Day::new(20, Part::B), 7186, d);
-            break;
+
+        if point == *end && depth == 0 {
+            return d;
         }
 
         explored.insert(node);
 
+        let (x, y) = point;
         let mut neighbors = vec![
             ((x, y - 1), depth),
             ((x, y + 1), depth),
