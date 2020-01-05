@@ -88,11 +88,25 @@ fn parse_map() -> Map {
         line_width = max(line_width, temp_width);
     }
 
-    Map { path, portals, start, end, line_width, line_count }
+    Map {
+        path,
+        portals,
+        start,
+        end,
+        line_width,
+        line_count,
+    }
 }
 
 fn shortest_distance(map: &Map) -> i32 {
-    let Map { path, portals, start, end, line_width: _, line_count: _ } = map;
+    let Map {
+        path,
+        portals,
+        start,
+        end,
+        line_width: _,
+        line_count: _,
+    } = map;
     let mut queue: PriorityQueue<Point, Reverse<i32>> = PriorityQueue::new();
     let mut explored: HashSet<Point> = HashSet::new();
 
@@ -123,7 +137,14 @@ fn shortest_distance(map: &Map) -> i32 {
 }
 
 fn shortest_recursive_distance(map: &Map) -> i32 {
-    let Map { path, portals, start, end, line_width, line_count } = map;
+    let Map {
+        path,
+        portals,
+        start,
+        end,
+        line_width,
+        line_count,
+    } = map;
     let mut queue: PriorityQueue<RecursivePoint, Reverse<i32>> = PriorityQueue::new();
     let mut explored: HashSet<RecursivePoint> = HashSet::new();
 
