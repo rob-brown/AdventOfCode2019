@@ -32,6 +32,32 @@ enum Direction {
     Left,
 }
 
+#[allow(dead_code)]
+fn print_panels(panels: &HashMap<(i32, i32), Color>) {
+    let mut min_x = 10_000;
+    let mut max_x = -10_000;
+    let mut min_y = 10_000;
+    let mut max_y = -10_000;
+
+    for ((x, y), _) in panels.iter() {
+        min_x = min(*x, min_x);
+        max_x = max(*x, max_x);
+        min_y = min(*y, min_y);
+        max_y = max(*y, max_y);
+    }
+
+    for y in min_y..(max_y + 1) {
+        for x in min_x..(max_x + 1) {
+            if let Some(Color::White) = panels.get(&(x, y)) {
+                print!("O");
+            } else {
+                print!(" ");
+            }
+        }
+        println!();
+    }
+}
+
 fn run(positions: &Vec<i64>, start_color: Color) -> HashMap<(i32, i32), Color> {
     let mut panels: HashMap<(i32, i32), Color> = HashMap::new();
     let mut machine = Machine::init(&positions);
@@ -75,30 +101,10 @@ pub fn solve() {
 
     assert_eq(Day::new(11, Part::A), 2129, panels.len());
 
-    let panels = run(&initial.positions, Color::White);
+    run(&initial.positions, Color::White);
 
-    let mut min_x = 10_000;
-    let mut max_x = -10_000;
-    let mut min_y = 10_000;
-    let mut max_y = -10_000;
-
-    for ((x, y), _) in panels.iter() {
-        min_x = min(*x, min_x);
-        max_x = max(*x, max_x);
-        min_y = min(*y, min_y);
-        max_y = max(*y, max_y);
-    }
-
-    for y in min_y..(max_y + 1) {
-        for x in min_x..(max_x + 1) {
-            if let Some(Color::White) = panels.get(&(x, y)) {
-                print!("O");
-            } else {
-                print!(" ");
-            }
-        }
-        println!();
-    }
+    // let panels = run(&initial.positions, Color::White);
+    // print_panels(&panels);
 
     assert_eq(Day::new(11, Part::B), "PECKRGZL", "PECKRGZL");
 }

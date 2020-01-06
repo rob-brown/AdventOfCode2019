@@ -2,14 +2,31 @@ use super::assert::*;
 use std::fs::File;
 use std::io::prelude::*;
 
+const WIDTH: usize = 25;
+const HEIGHT: usize = 6;
+const PIXELS: usize = WIDTH * HEIGHT;
+
+#[allow(dead_code)]
+fn print_buffer(frame_buffer: &[char; PIXELS]) {
+    for i in 0..PIXELS {
+        if i % WIDTH == 0 {
+            println!();
+        }
+
+        match frame_buffer[i] {
+            // '0' => print!("_"),
+            '1' => print!("O"),
+            _ => print!(" "),
+        }
+    }
+
+    println!();
+}
+
 pub fn solve() {
     let mut file = File::open("input/day8.txt").unwrap();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
-
-    const WIDTH: usize = 25;
-    const HEIGHT: usize = 6;
-    const PIXELS: usize = WIDTH * HEIGHT;
 
     let mut chunks = contents
         .chars()
@@ -54,18 +71,7 @@ pub fn solve() {
 
     assert_eq(Day::new(8, Part::A), 2048, product);
 
-    for i in 0..PIXELS {
-        if i % WIDTH == 0 {
-            println!();
-        }
-
-        match frame_buffer[i] {
-            // '0' => print!("_"),
-            '1' => print!("O"),
-            _ => print!(" "),
-        }
-    }
-
-    println!();
+    // print_buffer(&frame_buffer);
+    
     assert_eq(Day::new(8, Part::B), "HFYAK", "HFYAK");
 }
